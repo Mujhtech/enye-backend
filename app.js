@@ -6,12 +6,20 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.get("/", (req, res) => {
+  res.status(200).send({
+    results: {
+      message: "Api is running",
+    },
+  });
+});
+
 app.get("/api/rates", (req, res) => {
   if (/\?.+/.test(req.url)) {
     fetch("https://api.exchangeratesapi.io/latest?base=" + req.query.base + "")
       .then((response) => response.json())
       .then(function (data) {
-        if (("error" in data) == false) {
+        if ("error" in data == false) {
           let rate = {};
 
           req.query.currency.split(",").forEach(function (value) {
